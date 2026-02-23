@@ -1,0 +1,78 @@
+---
+title: "Survey Results Investigation"
+author: "abc & def"
+date: "`r format(Sys.Date(), '%Y-%m-%d')`"
+format:
+  html:
+    toc: true
+    code-fold: true
+    theme: cosmo
+---
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+library(tidyverse)
+```
+
+## Introduction
+
+This report demonstrates a simple example of a data analysis workflow using **Quarto**.  
+We’ll explore a small dataset of survey results.
+
+The dataset includes three columns:
+
+- `id` – respondent ID  
+- `age` – age of the respondent  
+- `score` – satisfaction score (0–100)
+
+
+## Load and inspect the data
+
+```{r}
+data <- read.csv("../data/raw/survey_results.csv")
+head(data)
+summary(data)
+```
+
+
+## Clean the data
+
+```{r}
+# Remove missing values (if any)
+clean_data <- na.omit(data)
+```
+
+
+## Summary Statistics
+
+```{r}
+summary(clean_data$score)
+mean_score <- mean(clean_data$score)
+sd_score <- sd(clean_data$score)
+
+paste("Average score:", round(mean_score, 1))
+paste("Standard deviation:", round(sd_score, 1))
+```
+
+
+## Visualize the data
+
+```{r}
+ggplot(clean_data, aes(x = age, y = score)) +
+  geom_point(color = "blue", size = 3) +
+  geom_smooth(method = "lm", se = FALSE, color = "purple") +
+  theme_minimal() +
+  labs(title = "Survey Score by Age",
+       x = "Age",
+       y = "Score")
+```
+
+
+## Conclusions
+
+- The average score is around **`r round(mean_score, 1)`**.
+- There appears to be a slight relationship between age and score.  
+- Further analysis could include correlation testing or regression modeling.
+
